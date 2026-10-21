@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glam Beauty Salon | Online Booking</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+body{background:#fdf2f8;color:#333;min-height:100vh;display:flex;justify-content:center;padding:16px}
+.container{width:100%;max-width:480px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(236,72,153,.2)}
+.header{background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;padding:28px 20px;text-align:center}
+.header h1{font-size:26px;margin-bottom:6px}
+.header p{opacity:.9;font-size:14px}
+.badges{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.2);padding:6px 12px;border-radius:20px;font-size:12px}
+.contact-row{display:flex;gap:10px;padding:14px}
+.contact-row a{flex:1;text-align:center;text-decoration:none;padding:12px;border-radius:12px;font-weight:700;font-size:15px}
+.call-btn{background:#111827;color:#fff}
+.wa-btn{background:#22c55e;color:#fff}
+.section{padding:16px 18px;border-top:1px solid #f3f4f6}
+.section h2{font-size:17px;margin-bottom:12px}
+.services{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.svc{border:2px solid #f3f4f6;border-radius:12px;padding:12px;cursor:pointer;text-align:center;transition:.2s}
+.svc.selected{border-color:#ec4899;background:#fdf2f8}
+.svc b{display:block;font-size:14px}
+.svc span{font-size:13px;color:#ec4899;font-weight:700}
+label{font-size:13px;font-weight:600;display:block;margin:12px 0 6px}
+input,select{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:10px;font-size:15px}
+input:focus,select:focus{border-color:#ec4899;outline:none}
+.times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.time{padding:10px;border:2px solid #e5e7eb;border-radius:10px;text-align:center;font-size:14px;cursor:pointer}
+.time.selected{background:#111827;color:#fff;border-color:#111827}
+.book-btn{width:100%;margin-top:16px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer}
+.wa-send{width:100%;margin-top:10px;background:#22c55e;color:#fff;border:none;padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
+.excel-btn{width:100%;margin-top:10px;background:#fff;border:2px solid #111827;padding:12px;border-radius:12px;font-weight:700;cursor:pointer}
+.success{background:#f0fdf4;border:1px solid #22c55e;padding:12px;border-radius:10px;margin-top:12px;font-size:14px;display:none}
+.book-list{font-size:13px;margin-top:10px}
+.book-item{background:#f9fafb;padding:10px;border-radius:8px;margin-bottom:8px}
+.footer{text-align:center;font-size:12px;color:#9ca3af;padding:16px}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1 id="salonName">Glam Beauty Salon</h1>
+<p>⭐ 4.9 | Open Mon-Sat 9AM-7PM | New York</p>
+<div class="badges"><div class="badge">Hair</div><div class="badge">Nails</div><div class="badge">Facial</div></div>
+</div>
+<div class="contact-row">
+<a id="callBtn" class="call-btn" href="tel:+15551234567">📞 Call Now</a>
+<a id="waTopBtn" class="wa-btn" href="https://wa.me/15551234567?text=Hi%20I%20want%20to%20book" target="_blank">WhatsApp</a>
+</div>
+<div class="section">
+<h2>1. Choose Service</h2>
+<div class="services" id="services">
+<div class="svc selected" data-name="Haircut" data-price="25"><b>💇 Haircut</b><span>$25 • 30min</span></div>
+<div class="svc" data-name="Hair Color" data-price="60"><b>🎨 Hair Color</b><span>$60 • 90min</span></div>
+<div class="svc" data-name="Manicure" data-price="30"><b>💅 Manicure</b><span>$30 • 45min</span></div>
+<div class="svc" data-name="Facial" data-price="45"><b>✨ Facial</b><span>$45 • 60min</span></div>
+</div>
+<h2 style="margin-top:16px">2. Pick Date & Time</h2>
+<label>Your Name</label>
+<input id="cName" placeholder="e.g. Sarah">
+<label>Phone Number</label>
+<input id="cPhone" placeholder="e.g. 555 123 4567">
+<label>Service</label>
+<select id="cService"><option>Haircut - $25</option><option>Hair Color - $60</option><option>Manicure - $30</option><option>Facial - $45</option></select>
+<label>Date</label>
+<input id="cDate" type="date">
+<label>Time</label>
+<div class="times" id="times">
+<div class="time">09:00 AM</div><div class="time selected">10:00 AM</div><div class="time">11:00 AM</div>
+<div class="time">01:00 PM</div><div class="time">03:00 PM</div><div class="time">05:00 PM</div>
+</div>
+<button class="book-btn" onclick="confirmBooking()">Confirm Booking ✓</button>
+<button class="wa-send" onclick="sendLastToWhatsApp()">Send Booking via WhatsApp</button>
+<div class="success" id="successBox"></div>
+</div>
+<div class="section">
+<h2>For Salon Owner</h2>
+<p style="font-size:13px;color:#666">All bookings are saved here. Export to Excel anytime.</p>
+<button class="excel-btn" onclick="downloadExcel()">⬇ Download Excel (.csv)</button>
+<div class="book-list" id="bookList"></div>
+</div>
+<div class="footer">Demo booking page • Made for your salon</div>
+</div>
+<script>
+// << شماره را اینجا عوض کن - بدون + // مثال: 15551234567 برای آمریکا >>
+const SALON_PHONE = "15551234567";
+const SALON_NAME = "Glam Beauty Salon";
+let selectedTime = "10:00 AM";
+let lastBooking = null;
+document.getElementById('callBtn').href = "tel:+" + SALON_PHONE;
+document.getElementById('waTopBtn').href = "https://wa.me/" + SALON_PHONE + "?text=" + encodeURIComponent("Hi " + SALON_NAME + "! I want to book an appointment.");
+document.getElementById('cDate').min = new Date().toISOString().split('T')[0];
+document.querySelectorAll('.svc').forEach(el=>{
+el.onclick=()=>{document.querySelectorAll('.svc').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');document.getElementById('cService').value=el.dataset.name+" - $"+el.dataset.price;}
+});
+document.querySelectorAll('.time').forEach(el=>{
+el.onclick=()=>{document.querySelectorAll('.time').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');selectedTime=el.innerText;}
+});
+function getBookings(){try{return JSON.parse(localStorage.getItem('salon_bookings')||'[]')}catch(e){return[]}}
+function renderBookings(){const list=getBookings();const box=document.getElementById('bookList');if(!list.length){box.innerHTML="<p style='color:#999;margin-top:8px'>No bookings yet. Test it above.</p>";return}box.innerHTML=list.slice().reverse().map(b=>`<div class="book-item"><b>${b.name}</b> • ${b.service}<br>${b.date} at ${b.time} • ${b.phone}</div>`).join('')}
+function confirmBooking(){
+const name=document.getElementById('cName').value.trim();
+const phone=document.getElementById('cPhone').value.trim();
+const service=document.getElementById('cService').value;
+const date=document.getElementById('cDate').value;
+if(!name||!phone||!date){alert('Please fill name, phone and date');return}
+const booking={name,phone,service,date,time:selectedTime,created:new Date().toLocaleString()};
+const all=getBookings();all.push(booking);localStorage.setItem('salon_bookings',JSON.stringify(all));
+lastBooking=booking;renderBookings();
+const box=document.getElementById('successBox');box.style.display='block';
+box.innerHTML=`✅ Booked! <b>${name}</b>, ${service} on ${date} at ${selectedTime}. We will confirm via WhatsApp.`;
+}
+function sendLastToWhatsApp(){
+if(!lastBooking){alert('Please confirm a booking first');return}
+const b=lastBooking;
+const text=`New Booking - ${SALON_NAME}%0AName: ${b.name}%0APhone: ${b.phone}%0AService: ${b.service}%0ADate: ${b.date}%0ATime: ${b.time}`;
+window.open(`https://wa.me/${SALON_PHONE}?text=${text}`,'_blank');
+}
+function downloadExcel(){
+const rows=getBookings();
+if(!rows.length){alert('No bookings yet to export');return}
+let csv='\uFEFFName,Phone,Service,Date,Time,Created\n';
+rows.forEach(r=>{csv+=`"${r.name}","${r.phone}","${r.service}","${r.date}","${r.time}","${r.created}"\n`});
+const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='salon-bookings.csv';a.click();
+}
+renderBookings();
+</script>
+</body>
+</html>
